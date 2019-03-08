@@ -6,7 +6,7 @@ import FaceRecognition from "./components/FaceRecognition/FaceRecognition";
 import Rank from "./components/Rank/Rank";
 import Particles from "react-particles-js";
 import Clarifai from "clarifai";
-import keys from "../keys";
+import keys from "./keys";
 import "./App.css";
 
 const app = new Clarifai.App({
@@ -31,26 +31,36 @@ class App extends Component {
     this.state = {
       input: "",
       imageUrl: "",
-      box: {}
+      box: []
     };
   }
 
   calculateFaceLocation = data => {
-    const clarifaiFace =
-      data.outputs[0].data.regions[0].region_info.bounding_box;
+    const arrayLength = data.outputs[0].data.regions;
+    const faces = [];
+    let coordinates = [];
     const image = document.getElementById("inputimage");
     const width = Number(image.width);
     const height = Number(image.height);
-    return {
-      leftCol: clarifaiFace.left_col * width,
-      topRow: clarifaiFace.top_row * height,
-      rightCol: width - clarifaiFace.right_col * width,
-      bottomRow: height - clarifaiFace.bottom_row * height
-    };
+
+    for (var i = 0; i < arrayLength.length; i++) {
+      faces.push(arrayLength[i].region_info.bounding_box);
+    }
+
+    for (var j = 0; j < faces.length; j++) {
+      let face = {
+        leftCol: faces[j].left_col * width,
+        topRow: faces[j].top_row * height,
+        rightCol: width - faces[j].right_col * width,
+        bottomRow: height - faces[j].bottom_row * height
+      };
+      coordinates.push(face);
+    }
+    return coordinates;
   };
 
   displayFaceBox = box => {
-    console.log(box);
+    // console.log(box);
     this.setState({ box: box });
   };
 
