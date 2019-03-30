@@ -1,6 +1,13 @@
 import React from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 
-const Register = ({ onRouteChange }) => {
+const Register = ({ onRouteChange, onReCaptchaChange, reCaptcha }) => {
+  const reCaptchaCheck = () => {
+    if (reCaptcha === true) {
+      onRouteChange("home");
+    }
+  };
+
   return (
     <article className="br3 ba dark-gray b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
       <main className="pa4 black-80">
@@ -46,10 +53,15 @@ const Register = ({ onRouteChange }) => {
               className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
               type="submit"
               value="Register"
-              onClick={() => onRouteChange("home")}
+              onClick={reCaptchaCheck}
             />
           </div>
         </div>
+        <ReCAPTCHA
+          className="mt3"
+          sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+          onChange={onReCaptchaChange}
+        />
       </main>
     </article>
   );

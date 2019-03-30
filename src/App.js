@@ -35,7 +35,8 @@ class App extends Component {
       imageUrl: "",
       box: [],
       route: "signin",
-      isSignedIn: false
+      isSignedIn: false,
+      reCaptcha: false
     };
   }
 
@@ -87,7 +88,13 @@ class App extends Component {
     } else if (route === "home") {
       this.setState({ isSignedIn: true });
     }
-    this.setState({ route: route });
+
+    this.setState({ route: route, reCaptcha: false });
+  };
+
+  onReCaptchaChange = () => {
+    this.setState({ reCaptcha: true });
+    console.log(this.state.reCaptcha);
   };
 
   render() {
@@ -110,9 +117,17 @@ class App extends Component {
             <FaceRecognition box={box} imageUrl={imageUrl} />
           </div>
         ) : route === "signin" ? (
-          <Signin onRouteChange={this.onRouteChange} />
+          <Signin
+            onRouteChange={this.onRouteChange}
+            onReCaptchaChange={this.onReCaptchaChange}
+            reCaptcha={this.state.reCaptcha}
+          />
         ) : (
-          <Register onRouteChange={this.onRouteChange} />
+          <Register
+            onRouteChange={this.onRouteChange}
+            onReCaptchaChange={this.onReCaptchaChange}
+            reCaptcha={this.state.reCaptcha}
+          />
         )}
       </div>
     );
